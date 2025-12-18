@@ -272,6 +272,13 @@
   text-transform: uppercase;
 }
 
+.rating-numeric {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+  margin-left: 0.5rem;
+}
+
 .other-users-ratings {
   margin-top: 1rem;
   padding-top: 1rem;

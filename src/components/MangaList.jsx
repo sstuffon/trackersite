@@ -52,13 +52,16 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   }, [localManga]);
 
   const handleRatingChange = (malId, rating) => {
-    // Allow any number, including over 10 for "Peak"
     const numRating = parseFloat(rating);
     if (isNaN(numRating) || numRating < 0) {
       return; // Don't update if invalid
     }
-    // Round to nearest 0.5 for values 0-10, keep exact value for over 10
-    const roundedRating = numRating > 10 ? numRating : Math.round(numRating * 2) / 2;
+    
+    // Clamp to maximum of 11
+    const clampedRating = Math.min(11, Math.max(0, numRating));
+    
+    // Round to nearest 0.5 for values 0-10, keep exact value for 10.5-11
+    const roundedRating = clampedRating > 10 ? clampedRating : Math.round(clampedRating * 2) / 2;
     
     // Update local state immediately
     setLocalManga(prev => prev.map(m => 
@@ -254,11 +257,12 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                 id={`rating-${manga.mal_id}`}
                 type="number"
                 min="0"
+                max="11"
                 step="0.5"
                 value={manga.userRating || 0}
                 onChange={(e) => handleRatingChange(manga.mal_id, e.target.value)}
                 className="rating-input"
-                placeholder="Enter rating (0-10 or over 10 for Peak)"
+                placeholder="Enter rating (0-10 or 10.5-11 for Peak)"
               />
               <div className="rating-display-value">
                 {manga.userRating && manga.userRating > 10 ? (
@@ -267,6 +271,9 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                   <span className="rating-value">
                     {manga.userRating ? `${manga.userRating.toFixed(1)}/10` : '0.0/10'}
                   </span>
+                )}
+                {manga.userRating && manga.userRating > 10 && (
+                  <span className="rating-numeric">({manga.userRating.toFixed(1)})</span>
                 )}
               </div>
               
