@@ -184,6 +184,10 @@ app.post('/api/users', async (req, res) => {
     }
 
     const normalizedUsername = username.trim().toLowerCase();
+    
+    // Ensure database connection before proceeding
+    await connectDB();
+    
     const users = await readUsers();
 
     if (users.includes(normalizedUsername)) {
@@ -203,7 +207,11 @@ app.post('/api/users', async (req, res) => {
     res.json({ success: true, username: normalizedUsername });
   } catch (error) {
     console.error('Error creating user:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      error: error.message || 'Internal server error',
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 
