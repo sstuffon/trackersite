@@ -24,33 +24,31 @@ const FriendsLists = () => {
     try {
       setLoading(true);
       const users = await getAllUsers();
-      const allManga = [];
-      const mangaMap = {}; // Track manga by mal_id for averaging
+      const mangaMap = {}; // Track unique manga by mal_id
 
       for (const username of users) {
         if (username === currentUser) continue; // Skip current user
         
         try {
           const mangaList = await api.getUserMangaList(username);
-          // Add username to each manga item
           mangaList.forEach(manga => {
-            const mangaWithOwner = {
-              ...manga,
-              ownerUsername: username
-            };
-            allManga.push(mangaWithOwner);
-            
-            // Track for average rating calculation
             if (!mangaMap[manga.mal_id]) {
+              // First time seeing this manga - initialize with base data
               mangaMap[manga.mal_id] = {
-                manga: manga,
+                ...manga,
                 ratings: [],
-                owners: []
+                owners: [],
+                statuses: []
               };
             }
+            
+            // Add this user's data
             if (manga.userRating !== undefined && manga.userRating !== null) {
               mangaMap[manga.mal_id].ratings.push(manga.userRating);
-              mangaMap[manga.mal_id].owners.push(username);
+            }
+            mangaMap[manga.mal_id].owners.push(username);
+            if (manga.status) {
+              mangaMap[manga.mal_id].statuses.push(manga.status);
             }
           });
         } catch (error) {
@@ -58,17 +56,29 @@ const FriendsLists = () => {
         }
       }
 
-      // Calculate average ratings
-      const mangaWithAverages = allManga.map(manga => {
-        const avgData = mangaMap[manga.mal_id];
-        const avgRating = avgData && avgData.ratings.length > 0
-          ? avgData.ratings.reduce((sum, r) => sum + r, 0) / avgData.ratings.length
+      // Convert map to array and calculate averages
+      const mangaWithAverages = Object.values(mangaMap).map(manga => {
+        const avgRating = manga.ratings.length > 0
+          ? manga.ratings.reduce((sum, r) => sum + r, 0) / manga.ratings.length
           : null;
+        
+        // Use most common status, or first one if tied
+        const statusCounts = {};
+        manga.statuses.forEach(s => {
+          statusCounts[s] = (statusCounts[s] || 0) + 1;
+        });
+        const mostCommonStatus = Object.keys(statusCounts).length > 0
+          ? Object.keys(statusCounts).reduce((a, b) => 
+              statusCounts[a] > statusCounts[b] ? a : b
+            )
+          : (manga.status || 'reading');
         
         return {
           ...manga,
           averageRating: avgRating,
-          ratingCount: avgData ? avgData.ratings.length : 0
+          ratingCount: manga.ratings.length,
+          ownerCount: manga.owners.length,
+          status: mostCommonStatus
         };
       });
 
@@ -218,7 +228,7 @@ const FriendsLists = () => {
 
       <div className="manga-list">
         {sortedAndFilteredManga.map((manga, index) => (
-          <div key={`${manga.mal_id}-${manga.ownerUsername}-${index}`} className="manga-card read-only">
+          <div key={`${manga.mal_id}-${view}-${index}`} className="manga-card read-only">
             <div className="manga-image">
               {manga.images?.jpg?.image_url ? (
                 <img 
