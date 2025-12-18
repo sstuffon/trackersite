@@ -25,11 +25,21 @@ let db;
 // Connect to MongoDB
 async function connectDB() {
   try {
-    if (!client) {
+    if (!client || !client.topology || !client.topology.isConnected()) {
+      if (client) {
+        try {
+          await client.close();
+        } catch (e) {
+          // Ignore close errors
+        }
+      }
       client = new MongoClient(MONGODB_URI);
       await client.connect();
       db = client.db(DB_NAME);
       console.log('Connected to MongoDB');
+    }
+    if (!db) {
+      db = client.db(DB_NAME);
     }
     return db;
   } catch (error) {
@@ -38,17 +48,25 @@ async function connectDB() {
   }
 }
 
-// Initialize database connection
-connectDB().catch(console.error);
+// Initialize database connection (only for non-serverless environments)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  connectDB().catch(console.error);
+}
 
 // Helper functions for database operations
 async function getUsersCollection() {
   const database = await connectDB();
+  if (!database) {
+    throw new Error('Database connection not available');
+  }
   return database.collection(USERS_COLLECTION);
 }
 
 async function getMangaCollection() {
   const database = await connectDB();
+  if (!database) {
+    throw new Error('Database connection not available');
+  }
   return database.collection(MANGA_COLLECTION);
 }
 
