@@ -1,5 +1,5 @@
 // API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://tracker-api.vercel.app';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://trackerlist-api.vercel.app';
 
 // Check if API is available
 let apiAvailable = true;
