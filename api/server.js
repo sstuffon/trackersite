@@ -201,6 +201,20 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Root endpoint - API information
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Reading Tracker API',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      users: '/api/users',
+      userManga: '/api/users/:username/manga',
+      userStats: '/api/users/:username/stats'
+    }
+  });
+});
+
 // Initialize and start server
 const PORT = process.env.PORT || 3001;
 
