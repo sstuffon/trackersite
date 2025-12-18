@@ -243,12 +243,14 @@ const FriendsLists = () => {
                     </span>
                   )}
                   <span className="manga-status-badge">{manga.status || 'Unknown'}</span>
-                  {view === 'all' && manga.ownerUsername && (
-                    <span className="owner-badge">{manga.ownerUsername}</span>
+                  {view === 'all' && manga.ownerCount > 0 && (
+                    <span className="owner-badge">
+                      {manga.ownerCount} {manga.ownerCount === 1 ? 'user' : 'users'}
+                    </span>
                   )}
                   {view === 'all' && manga.averageRating !== null && (
                     <span className="avg-rating-badge">
-                      Avg: {manga.averageRating.toFixed(1)}/10 ({manga.ratingCount})
+                      Avg: {manga.averageRating.toFixed(1)}/10 ({manga.ratingCount} {manga.ratingCount === 1 ? 'rating' : 'ratings'})
                     </span>
                   )}
                 </div>
