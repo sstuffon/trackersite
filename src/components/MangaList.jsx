@@ -15,10 +15,13 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   }, [scrollToId]);
 
   const handleRatingChange = async (malId, rating) => {
-    const numRating = parseFloat(rating) || 0;
-    const clampedRating = Math.max(0, Math.min(10, numRating));
-    // Round to nearest 0.5
-    const roundedRating = Math.round(clampedRating * 2) / 2;
+    // Allow any number, including over 10 for "Peak"
+    const numRating = parseFloat(rating);
+    if (isNaN(numRating) || numRating < 0) {
+      return; // Don't update if invalid
+    }
+    // Round to nearest 0.5 for values 0-10, keep exact value for over 10
+    const roundedRating = numRating > 10 ? numRating : Math.round(numRating * 2) / 2;
     await updateManga(malId, { userRating: roundedRating });
     onUpdate();
   };
@@ -131,36 +134,27 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
 
             <div className="control-group">
               <label htmlFor={`rating-${manga.mal_id}`}>
-                Your Rating (0-10, .5 increments):
+                Your Rating:
               </label>
               <input
                 id={`rating-${manga.mal_id}`}
                 type="number"
                 min="0"
-                max="10"
                 step="0.5"
                 value={manga.userRating || 0}
                 onChange={(e) => handleRatingChange(manga.mal_id, e.target.value)}
                 className="rating-input"
+                placeholder="Enter rating (0-10 or over 10 for Peak)"
               />
-              <div className="rating-display">
-                {Array.from({ length: 10 }, (_, i) => {
-                  const rating = manga.userRating || 0;
-                  const starValue = i + 1;
-                  const isFilled = starValue <= rating;
-                  const isHalf = starValue - 0.5 <= rating && rating < starValue;
-                  return (
-                    <span
-                      key={i}
-                      className={`star ${isFilled ? 'filled' : ''} ${isHalf ? 'half' : ''}`}
-                      title={`${rating.toFixed(1)}/10`}
-                    >
-                      {isHalf ? '☆' : '★'}
-                    </span>
-                  );
-                })}
+              <div className="rating-display-value">
+                {manga.userRating && manga.userRating > 10 ? (
+                  <span className="rating-peak">PEAK</span>
+                ) : (
+                  <span className="rating-value">
+                    {manga.userRating ? `${manga.userRating.toFixed(1)}/10` : '0.0/10'}
+                  </span>
+                )}
               </div>
-              <span className="rating-value">{(manga.userRating || 0).toFixed(1)}/10</span>
             </div>
 
             <div className="control-group">

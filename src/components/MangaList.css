@@ -197,32 +197,25 @@
   color: var(--text-primary);
 }
 
-.rating-display {
-  display: flex;
-  gap: 1px;
-  font-size: 0.9rem;
-  flex-wrap: wrap;
+.rating-display-value {
   margin-top: 0.5rem;
-}
-
-.rating-display .star {
-  color: var(--border-color);
-  transition: color 0.2s;
-}
-
-.rating-display .star.filled {
-  color: var(--text-primary);
-}
-
-.rating-display .star.half {
-  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
 }
 
 .rating-value {
   font-size: 0.9rem;
   color: var(--text-secondary);
-  margin-top: 0.25rem;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.rating-peak {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: normal;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .comments-input {
