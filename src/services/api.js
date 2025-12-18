@@ -16,8 +16,16 @@ async function apiCall(endpoint, options = {}) {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Request failed' }));
-      throw new Error(error.error || `HTTP error! status: ${response.status}`);
+      let errorData;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { error: `HTTP error! status: ${response.status}` };
+      }
+      const errorMessage = errorData.error || errorData.message || `HTTP error! status: ${response.status}`;
+      const error = new Error(errorMessage);
+      error.status = response.status;
+      throw error;
     }
 
     apiAvailable = true;

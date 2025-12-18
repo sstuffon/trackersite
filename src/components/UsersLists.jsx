@@ -121,14 +121,20 @@ const UsersLists = ({ onUserSwitch }) => {
       }
     } catch (error) {
       console.error('Error creating user:', error);
-      // If it's a network error, the fallback should have handled it
-      // But if it's another error, show a message
-      if (!error.message.includes('Failed to fetch') && !error.message.includes('NetworkError')) {
-        alert('Error creating user. Please try again.');
-      } else {
-        // Fallback worked, reload users
+      // Check if it's a network/CORS error
+      const isNetworkError = error.message.includes('Failed to fetch') || 
+                            error.message.includes('NetworkError') ||
+                            error.message.includes('CORS') ||
+                            error.message.includes('Network request failed');
+      
+      if (isNetworkError) {
+        // Fallback to localStorage should have worked, reload users
         setNewUsername('');
         await loadUsers();
+      } else {
+        // Show the actual error message if available
+        const errorMsg = error.message || 'Error creating user. Please try again.';
+        alert(`Error creating user: ${errorMsg}`);
       }
     }
   };

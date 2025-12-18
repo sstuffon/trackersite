@@ -115,8 +115,16 @@ export const addUser = async (username) => {
   } catch (error) {
     console.error('Error creating user via API, trying localStorage fallback:', error);
     
+    // Check for network/CORS errors
+    const isNetworkError = !isApiAvailable() || 
+                          error.message.includes('Failed to fetch') || 
+                          error.message.includes('NetworkError') ||
+                          error.message.includes('CORS') ||
+                          error.message.includes('Network request failed') ||
+                          error.name === 'TypeError';
+    
     // Fallback to localStorage if API fails
-    if (!isApiAvailable() || error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+    if (isNetworkError) {
       const localUsers = getLocalStorageUsers();
       if (localUsers.includes(username)) {
         return false; // Already exists
@@ -132,9 +140,14 @@ export const addUser = async (username) => {
       return true;
     }
     
-    if (error.message.includes('already exists') || error.message.includes('409')) {
+    // Check if user already exists (409 status or specific error message)
+    if (error.message.includes('already exists') || 
+        error.message.includes('409') ||
+        error.message.includes('Username already exists')) {
       return false;
     }
+    
+    // For other errors, throw to let the caller handle it
     throw error;
   }
 };
