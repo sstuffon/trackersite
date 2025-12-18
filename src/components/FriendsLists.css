@@ -2,6 +2,50 @@
   max-width: 1400px;
   margin: 0 auto;
   font-family: 'Courier New', Courier, monospace;
+  position: relative;
+}
+
+.sort-dropdown-container {
+  position: fixed;
+  top: 200px;
+  right: 2rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.sort-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 1px;
+}
+
+.sort-dropdown {
+  padding: 0.5rem 1rem;
+  background: var(--background-alt);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  min-width: 150px;
+}
+
+.sort-dropdown:hover,
+.sort-dropdown:focus {
+  border-color: var(--text-primary);
+  background: var(--surface);
+}
+
+.sort-dropdown option {
+  background: var(--background-alt);
+  color: var(--text-primary);
 }
 
 .friends-lists-header {

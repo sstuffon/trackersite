@@ -114,20 +114,18 @@ function App() {
       <main className="app-main">
         {activeTab === 'list' ? (
           <>
-            <div className="sort-controls">
-              <span className="sort-label">Sort by:</span>
-              <button
-                className={`sort-btn ${sortOrder === 'highest' ? 'active' : ''}`}
-                onClick={() => handleSortOrder('highest')}
+            <div className="sort-dropdown-container">
+              <label htmlFor="sort-dropdown" className="sort-label">Sort by:</label>
+              <select
+                id="sort-dropdown"
+                className="sort-dropdown"
+                value={sortOrder || 'none'}
+                onChange={(e) => handleSortOrder(e.target.value === 'none' ? null : e.target.value)}
               >
-                Highest Score
-              </button>
-              <button
-                className={`sort-btn ${sortOrder === 'lowest' ? 'active' : ''}`}
-                onClick={() => handleSortOrder('lowest')}
-              >
-                Lowest Score
-              </button>
+                <option value="none">None</option>
+                <option value="highest">Highest Score</option>
+                <option value="lowest">Lowest Score</option>
+              </select>
             </div>
             <MangaList 
               mangaList={sortedAndFilteredManga} 

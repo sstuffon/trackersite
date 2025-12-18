@@ -16,25 +16,27 @@
   margin-bottom: 60px;
 }
 
-.sort-controls {
+.sort-dropdown-container {
+  position: fixed;
+  top: 200px;
+  right: 2rem;
+  z-index: 50;
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
 }
 
 .sort-label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
   font-family: 'Courier New', Courier, monospace;
   letter-spacing: 1px;
 }
 
-.sort-btn {
+.sort-dropdown {
   padding: 0.5rem 1rem;
-  background: transparent;
+  background: var(--background-alt);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   font-family: 'Courier New', Courier, monospace;
@@ -43,19 +45,30 @@
   outline: none;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+  min-width: 150px;
 }
 
-.sort-btn:hover,
-.sort-btn:focus {
+.sort-dropdown:hover,
+.sort-dropdown:focus {
   border-color: var(--text-primary);
-  background: var(--text-primary);
-  color: var(--background);
+  background: var(--surface);
 }
 
-.sort-btn.active {
-  border-color: var(--text-primary);
-  background: var(--text-primary);
-  color: var(--background);
+.sort-dropdown option {
+  background: var(--background-alt);
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .sort-dropdown-container {
+    top: 180px;
+    right: 1rem;
+  }
+  
+  .sort-dropdown {
+    min-width: 120px;
+    font-size: 0.8rem;
+  }
 }
 
 .app-header {
