@@ -89,16 +89,22 @@ const SearchManga = ({ onAdd }) => {
     }, 300);
   };
 
-  const handleAdd = (manga) => {
-    const success = addManga(manga);
-    if (success) {
-      setMessage(`"${manga.title}" added to your list!`);
+  const handleAdd = async (manga) => {
+    try {
+      const success = await addManga(manga);
+      if (success) {
+        setMessage(`"${manga.title}" added to your list!`);
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        setMessage(`"${manga.title}" is already in your list.`);
+        setTimeout(() => setMessage(''), 3000);
+      }
+      onAdd();
+    } catch (error) {
+      setMessage('Error adding manga. Please try again.');
       setTimeout(() => setMessage(''), 3000);
-    } else {
-      setMessage(`"${manga.title}" is already in your list.`);
-      setTimeout(() => setMessage(''), 3000);
+      console.error('Error adding manga:', error);
     }
-    onAdd();
   };
 
   return (

@@ -14,33 +14,33 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     }
   }, [scrollToId]);
 
-  const handleRatingChange = (malId, rating) => {
+  const handleRatingChange = async (malId, rating) => {
     const numRating = parseFloat(rating) || 0;
     const clampedRating = Math.max(0, Math.min(10, numRating));
     // Round to nearest 0.5
     const roundedRating = Math.round(clampedRating * 2) / 2;
-    updateManga(malId, { userRating: roundedRating });
+    await updateManga(malId, { userRating: roundedRating });
     onUpdate();
   };
 
-  const handleChaptersChange = (malId, chapters) => {
-    updateManga(malId, { chaptersRead: Math.max(0, parseInt(chapters) || 0) });
+  const handleChaptersChange = async (malId, chapters) => {
+    await updateManga(malId, { chaptersRead: Math.max(0, parseInt(chapters) || 0) });
     onUpdate();
   };
 
-  const handleStatusChange = (malId, status) => {
-    updateManga(malId, { status });
+  const handleStatusChange = async (malId, status) => {
+    await updateManga(malId, { status });
     onUpdate();
   };
 
-  const handleCommentsChange = (malId, comments) => {
-    updateManga(malId, { comments });
+  const handleCommentsChange = async (malId, comments) => {
+    await updateManga(malId, { comments });
     onUpdate();
   };
 
-  const handleRemove = (malId) => {
+  const handleRemove = async (malId) => {
     if (window.confirm('Remove this manga from your list?')) {
-      removeManga(malId);
+      await removeManga(malId);
       onUpdate();
     }
   };

@@ -1,17 +1,17 @@
 import { getCurrentUser, getUserMangaList, saveUserMangaList } from './userStorage';
 
-export const getTrackedManga = () => {
+export const getTrackedManga = async () => {
   const currentUser = getCurrentUser();
-  return getUserMangaList(currentUser);
+  return await getUserMangaList(currentUser);
 };
 
-export const saveTrackedManga = (mangaList) => {
+export const saveTrackedManga = async (mangaList) => {
   const currentUser = getCurrentUser();
-  saveUserMangaList(currentUser, mangaList);
+  return await saveUserMangaList(currentUser, mangaList);
 };
 
-export const addManga = (manga) => {
-  const list = getTrackedManga();
+export const addManga = async (manga) => {
+  const list = await getTrackedManga();
   // Check if already exists
   if (list.find(m => m.mal_id === manga.mal_id)) {
     return false; // Already exists
@@ -27,25 +27,26 @@ export const addManga = (manga) => {
   };
   
   list.push(newManga);
-  saveTrackedManga(list);
+  await saveTrackedManga(list);
   return true;
 };
 
-export const updateManga = (malId, updates) => {
-  const list = getTrackedManga();
+export const updateManga = async (malId, updates) => {
+  const list = await getTrackedManga();
   const index = list.findIndex(m => m.mal_id === malId);
   
   if (index === -1) return false;
   
   list[index] = { ...list[index], ...updates };
-  saveTrackedManga(list);
+  await saveTrackedManga(list);
   return true;
 };
 
-export const removeManga = (malId) => {
-  const list = getTrackedManga();
+export const removeManga = async (malId) => {
+  const list = await getTrackedManga();
   const filtered = list.filter(m => m.mal_id !== malId);
-  saveTrackedManga(filtered);
-  return filtered.length !== list.length;
+  const originalLength = list.length;
+  await saveTrackedManga(filtered);
+  return filtered.length !== originalLength;
 };
 

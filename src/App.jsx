@@ -18,9 +18,15 @@ function App() {
     loadManga();
   }, [currentUser]);
 
-  const loadManga = () => {
-    setTrackedManga(getTrackedManga());
-    setCurrentUser(getCurrentUser());
+  const loadManga = async () => {
+    try {
+      const manga = await getTrackedManga();
+      setTrackedManga(manga);
+      setCurrentUser(getCurrentUser());
+    } catch (error) {
+      console.error('Error loading manga:', error);
+      setTrackedManga([]);
+    }
   };
 
   const handleMangaUpdate = () => {
