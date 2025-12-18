@@ -159,8 +159,7 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
-.rating-input,
-.chapters-input {
+.rating-input {
   padding: 0.5rem;
   background: var(--background-alt);
   border: 1px solid var(--border-color);
@@ -169,6 +168,54 @@
   font-size: 1rem;
   width: 100%;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.chapters-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.chapters-input {
+  flex: 1;
+  padding: 0.5rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+}
+
+.chapters-btn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0;
+  font-size: 1.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.chapters-btn:hover,
+.chapters-btn:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.chapters-btn:active {
+  background: var(--text-primary);
+  color: var(--background);
 }
 
 .rating-input:focus,
