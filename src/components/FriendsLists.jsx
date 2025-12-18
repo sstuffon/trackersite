@@ -215,6 +215,20 @@ const FriendsLists = () => {
           </div>
         </div>
       </div>
+      
+      <div className="sort-dropdown-container">
+        <label htmlFor="friends-sort-dropdown" className="sort-label">Sort by:</label>
+        <select
+          id="friends-sort-dropdown"
+          className="sort-dropdown"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="status">Status</option>
+          <option value="lowest">Lowest Score</option>
+          <option value="highest">{view === 'all' ? 'Highest Avg' : 'Highest Score'}</option>
+        </select>
+      </div>
 
       <div className="manga-list">
         {sortedAndFilteredManga.map((manga, index) => (
