@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { updateManga, removeManga } from '../services/storage';
 import './MangaList.css';
 
 const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   const [editingId, setEditingId] = useState(null);
+  const [localManga, setLocalManga] = useState(mangaList);
+  const saveTimeouts = useRef({});
 
   useEffect(() => {
     if (scrollToId) {
@@ -14,7 +16,12 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     }
   }, [scrollToId]);
 
-  const handleRatingChange = async (malId, rating) => {
+  // Sync local state with prop changes
+  useEffect(() => {
+    setLocalManga(mangaList);
+  }, [mangaList]);
+
+  const handleRatingChange = (malId, rating) => {
     // Allow any number, including over 10 for "Peak"
     const numRating = parseFloat(rating);
     if (isNaN(numRating) || numRating < 0) {
@@ -22,23 +29,49 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     }
     // Round to nearest 0.5 for values 0-10, keep exact value for over 10
     const roundedRating = numRating > 10 ? numRating : Math.round(numRating * 2) / 2;
-    await updateManga(malId, { userRating: roundedRating });
-    onUpdate();
+    
+    // Update local state immediately
+    setLocalManga(prev => prev.map(m => 
+      m.mal_id === malId ? { ...m, userRating: roundedRating } : m
+    ));
+    
+    // Clear existing timeout for this manga
+    if (saveTimeouts.current[malId]) {
+      clearTimeout(saveTimeouts.current[malId]);
+    }
+    
+    // Save after debounce delay
+    saveTimeouts.current[malId] = setTimeout(async () => {
+      await updateManga(malId, { userRating: roundedRating });
+      onUpdate();
+      delete saveTimeouts.current[malId];
+    }, 500);
   };
 
   const handleChaptersChange = (malId, chapters) => {
-    // Update immediately without waiting for async
     const chaptersInt = parseInt(chapters) || 0;
     const validChapters = Math.max(0, chaptersInt);
     
-    // Save asynchronously in background without blocking UI
-    updateManga(malId, { chaptersRead: validChapters }).then(() => {
+    // Update local state immediately
+    setLocalManga(prev => prev.map(m => 
+      m.mal_id === malId ? { ...m, chaptersRead: validChapters } : m
+    ));
+    
+    // Clear existing timeout for this manga
+    if (saveTimeouts.current[`${malId}-chapters`]) {
+      clearTimeout(saveTimeouts.current[`${malId}-chapters`]);
+    }
+    
+    // Save after debounce delay
+    saveTimeouts.current[`${malId}-chapters`] = setTimeout(async () => {
+      await updateManga(malId, { chaptersRead: validChapters });
       onUpdate();
-    });
+      delete saveTimeouts.current[`${malId}-chapters`];
+    }, 500);
   };
 
   const handleChaptersIncrement = (malId, increment) => {
-    const manga = mangaList.find(m => m.mal_id === malId);
+    const manga = localManga.find(m => m.mal_id === malId);
     const currentChapters = manga?.chaptersRead || 0;
     const newChapters = Math.max(0, currentChapters + increment);
     
@@ -56,7 +89,7 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   };
 
   const handleStatusChange = async (malId, status) => {
-    const manga = mangaList.find(m => m.mal_id === malId);
+    const manga = localManga.find(m => m.mal_id === malId);
     const updates = { status };
     
     // If status is "completed" and manga has total chapters, set chaptersRead to max
@@ -64,13 +97,33 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
       updates.chaptersRead = manga.chapters;
     }
     
+    // Update local state immediately
+    setLocalManga(prev => prev.map(m => 
+      m.mal_id === malId ? { ...m, ...updates } : m
+    ));
+    
+    // Save immediately for status changes (no debounce needed)
     await updateManga(malId, updates);
     onUpdate();
   };
 
-  const handleCommentsChange = async (malId, comments) => {
-    await updateManga(malId, { comments });
-    onUpdate();
+  const handleCommentsChange = (malId, comments) => {
+    // Update local state immediately
+    setLocalManga(prev => prev.map(m => 
+      m.mal_id === malId ? { ...m, comments } : m
+    ));
+    
+    // Clear existing timeout for this manga
+    if (saveTimeouts.current[`${malId}-comments`]) {
+      clearTimeout(saveTimeouts.current[`${malId}-comments`]);
+    }
+    
+    // Save after debounce delay
+    saveTimeouts.current[`${malId}-comments`] = setTimeout(async () => {
+      await updateManga(malId, { comments });
+      onUpdate();
+      delete saveTimeouts.current[`${malId}-comments`];
+    }, 500);
   };
 
   const handleRemove = async (malId) => {
@@ -80,7 +133,14 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     }
   };
 
-  if (mangaList.length === 0) {
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(saveTimeouts.current).forEach(timeout => clearTimeout(timeout));
+    };
+  }, []);
+
+  if (localManga.length === 0) {
     return (
       <div className="empty-state">
         <p>No manga found. Search and add some manga to get started, or try a different filter.</p>
@@ -90,7 +150,7 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
 
   return (
     <div className="manga-list">
-      {mangaList.map((manga) => (
+      {localManga.map((manga) => (
         <div key={manga.mal_id} id={`manga-${manga.mal_id}`} className="manga-card">
           <div className="manga-image">
             {manga.images?.jpg?.image_url ? (
