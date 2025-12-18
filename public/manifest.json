@@ -1,0 +1,25 @@
+{
+  "name": "Reading Tracker by Stephan",
+  "short_name": "Reading Tracker",
+  "description": "Track manga and manhwa reading progress",
+  "start_url": "/trackersite/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/trackersite/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/trackersite/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
