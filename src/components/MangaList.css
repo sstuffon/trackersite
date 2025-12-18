@@ -272,6 +272,36 @@
   text-transform: uppercase;
 }
 
+.other-users-ratings {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.other-ratings-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+  margin-bottom: 0.5rem;
+}
+
+.other-rating-item {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.other-rating-username {
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.other-rating-value {
+  color: var(--text-primary);
+}
+
 .comments-input {
   padding: 0.5rem;
   background: var(--background-alt);

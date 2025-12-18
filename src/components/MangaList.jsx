@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { updateManga, removeManga } from '../services/storage';
+import { api } from '../services/api';
+import { getCurrentUser } from '../services/userStorage';
 import './MangaList.css';
 
 const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   const [editingId, setEditingId] = useState(null);
   const [localManga, setLocalManga] = useState(mangaList);
+  const [otherUsersRatings, setOtherUsersRatings] = useState({});
   const saveTimeouts = useRef({});
 
   useEffect(() => {
@@ -20,6 +23,33 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   useEffect(() => {
     setLocalManga(mangaList);
   }, [mangaList]);
+
+  // Fetch other users' ratings for all manga
+  useEffect(() => {
+    const fetchOtherUsersRatings = async () => {
+      const currentUser = getCurrentUser();
+      const ratingsMap = {};
+      
+      for (const manga of localManga) {
+        try {
+          const ratings = await api.getMangaRatings(manga.mal_id);
+          // Filter out current user's rating
+          const otherRatings = ratings.filter(r => r.username !== currentUser);
+          if (otherRatings.length > 0) {
+            ratingsMap[manga.mal_id] = otherRatings;
+          }
+        } catch (error) {
+          console.error(`Error fetching ratings for manga ${manga.mal_id}:`, error);
+        }
+      }
+      
+      setOtherUsersRatings(ratingsMap);
+    };
+    
+    if (localManga.length > 0) {
+      fetchOtherUsersRatings();
+    }
+  }, [localManga]);
 
   const handleRatingChange = (malId, rating) => {
     // Allow any number, including over 10 for "Peak"
@@ -239,6 +269,21 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                   </span>
                 )}
               </div>
+              
+              {/* Other users' ratings */}
+              {otherUsersRatings[manga.mal_id] && otherUsersRatings[manga.mal_id].length > 0 && (
+                <div className="other-users-ratings">
+                  <div className="other-ratings-label">Other Users:</div>
+                  {otherUsersRatings[manga.mal_id].map((rating, index) => (
+                    <div key={index} className="other-rating-item">
+                      <span className="other-rating-username">{rating.username}:</span>
+                      <span className="other-rating-value">
+                        {rating.rating && rating.rating > 10 ? 'PEAK' : rating.rating ? `${rating.rating.toFixed(1)}/10` : 'No rating'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="control-group">

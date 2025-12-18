@@ -269,6 +269,40 @@ app.get('/api/users/:username/stats', async (req, res) => {
   }
 });
 
+// Get all ratings and comments for a specific manga across all users
+app.get('/api/manga/:malId/ratings', async (req, res) => {
+  try {
+    const { malId } = req.params;
+    const mangaId = parseInt(malId);
+    
+    if (isNaN(mangaId)) {
+      return res.status(400).json({ error: 'Invalid manga ID' });
+    }
+    
+    const collection = await getMangaCollection();
+    const allLists = await collection.find({}).toArray();
+    
+    const ratings = [];
+    
+    for (const userList of allLists) {
+      const manga = userList.manga.find(m => m.mal_id === mangaId);
+      if (manga && (manga.userRating !== undefined || manga.comments)) {
+        ratings.push({
+          username: userList.username,
+          rating: manga.userRating,
+          comments: manga.comments || '',
+          status: manga.status || 'reading'
+        });
+      }
+    }
+    
+    res.json(ratings);
+  } catch (error) {
+    console.error('Error fetching manga ratings:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

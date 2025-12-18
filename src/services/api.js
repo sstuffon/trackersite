@@ -79,5 +79,10 @@ export const api = {
   healthCheck: async () => {
     return await apiCall('/api/health');
   },
+
+  // Get all ratings for a manga across all users
+  getMangaRatings: async (malId) => {
+    return await apiCall(`/api/manga/${malId}/ratings`);
+  },
 };
 
