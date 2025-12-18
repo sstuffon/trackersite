@@ -340,7 +340,6 @@ const FriendsLists = () => {
           </div>
         ))}
       </div>
-    </div>
       {sortedAndFilteredManga.length === 0 && (
         <div className="friends-lists-empty">
           <p>No manga found{statusFilter !== 'all' ? ` (${statusFilter})` : ''}.</p>
