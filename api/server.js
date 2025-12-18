@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs').promises;
-const path = require('path');
+const { MongoClient } = require('mongodb');
 
 const app = express();
 
@@ -14,62 +13,89 @@ app.use(cors({
 
 app.use(express.json());
 
-const DATA_DIR = path.join(__dirname, 'data');
-const USERS_FILE = path.join(DATA_DIR, 'users.json');
-const DATA_FILE = path.join(DATA_DIR, 'data.json');
+// MongoDB connection
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/tracker';
+const DB_NAME = 'tracker';
+const USERS_COLLECTION = 'users';
+const MANGA_COLLECTION = 'mangaLists';
 
-// Ensure data directory exists
-async function ensureDataDir() {
+let client;
+let db;
+
+// Connect to MongoDB
+async function connectDB() {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
+    if (!client) {
+      client = new MongoClient(MONGODB_URI);
+      await client.connect();
+      db = client.db(DB_NAME);
+      console.log('Connected to MongoDB');
+    }
+    return db;
   } catch (error) {
-    console.error('Error creating data directory:', error);
+    console.error('MongoDB connection error:', error);
+    throw error;
   }
 }
 
-// Initialize data files
-async function initializeData() {
-  await ensureDataDir();
-  try {
-    await fs.access(USERS_FILE);
-  } catch {
-    await fs.writeFile(USERS_FILE, JSON.stringify([]));
-  }
-  try {
-    await fs.access(DATA_FILE);
-  } catch {
-    await fs.writeFile(DATA_FILE, JSON.stringify({}));
-  }
+// Initialize database connection
+connectDB().catch(console.error);
+
+// Helper functions for database operations
+async function getUsersCollection() {
+  const database = await connectDB();
+  return database.collection(USERS_COLLECTION);
 }
 
-// Read users
+async function getMangaCollection() {
+  const database = await connectDB();
+  return database.collection(MANGA_COLLECTION);
+}
+
+// Read users from database
 async function readUsers() {
   try {
-    const data = await fs.readFile(USERS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch {
+    const collection = await getUsersCollection();
+    const users = await collection.find({}).toArray();
+    return users.map(u => u.username).sort();
+  } catch (error) {
+    console.error('Error reading users:', error);
     return [];
   }
 }
 
-// Write users
-async function writeUsers(users) {
-  await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
-}
-
-// Read all data
-async function readData() {
+// Read user's manga list from database
+async function readUserMangaList(username) {
   try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch {
-    return {};
+    const collection = await getMangaCollection();
+    const doc = await collection.findOne({ username });
+    return doc ? doc.manga : [];
+  } catch (error) {
+    console.error('Error reading manga list:', error);
+    return [];
   }
 }
 
-// Write all data
-async function writeData(data) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2));
+// Save user's manga list to database
+async function saveUserMangaList(username, mangaList) {
+  try {
+    const collection = await getMangaCollection();
+    await collection.updateOne(
+      { username },
+      { 
+        $set: { 
+          username, 
+          manga: mangaList, 
+          updatedAt: new Date() 
+        } 
+      },
+      { upsert: true }
+    );
+    return true;
+  } catch (error) {
+    console.error('Error saving manga list:', error);
+    return false;
+  }
 }
 
 // API Routes
@@ -92,23 +118,26 @@ app.post('/api/users', async (req, res) => {
       return res.status(400).json({ error: 'Username is required' });
     }
 
-    const users = await readUsers();
     const normalizedUsername = username.trim().toLowerCase();
+    const users = await readUsers();
 
     if (users.includes(normalizedUsername)) {
       return res.status(409).json({ error: 'Username already exists' });
     }
 
-    users.push(normalizedUsername);
-    await writeUsers(users);
+    // Add user to database
+    const usersCollection = await getUsersCollection();
+    await usersCollection.insertOne({
+      username: normalizedUsername,
+      createdAt: new Date()
+    });
 
-    // Initialize empty list for new user
-    const data = await readData();
-    data[normalizedUsername] = [];
-    await writeData(data);
+    // Initialize empty manga list for new user
+    await saveUserMangaList(normalizedUsername, []);
 
     res.json({ success: true, username: normalizedUsername });
   } catch (error) {
+    console.error('Error creating user:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -117,9 +146,10 @@ app.post('/api/users', async (req, res) => {
 app.get('/api/users/:username/manga', async (req, res) => {
   try {
     const { username } = req.params;
-    const data = await readData();
-    res.json(data[username] || []);
+    const mangaList = await readUserMangaList(username);
+    res.json(mangaList);
   } catch (error) {
+    console.error('Error fetching manga list:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -130,12 +160,14 @@ app.post('/api/users/:username/manga', async (req, res) => {
     const { username } = req.params;
     const mangaList = req.body;
 
-    const data = await readData();
-    data[username] = mangaList;
-    await writeData(data);
-
-    res.json({ success: true });
+    const success = await saveUserMangaList(username, mangaList);
+    if (success) {
+      res.json({ success: true });
+    } else {
+      res.status(500).json({ error: 'Failed to save manga list' });
+    }
   } catch (error) {
+    console.error('Error saving manga list:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -144,8 +176,7 @@ app.post('/api/users/:username/manga', async (req, res) => {
 app.get('/api/users/:username/stats', async (req, res) => {
   try {
     const { username } = req.params;
-    const data = await readData();
-    const list = data[username] || [];
+    const list = await readUserMangaList(username);
 
     const stats = {
       total: list.length,
@@ -160,6 +191,7 @@ app.get('/api/users/:username/stats', async (req, res) => {
 
     res.json(stats);
   } catch (error) {
+    console.error('Error fetching stats:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -172,13 +204,14 @@ app.get('/api/health', (req, res) => {
 // Initialize and start server
 const PORT = process.env.PORT || 3001;
 
-initializeData().then(() => {
-  if (process.env.NODE_ENV !== 'production') {
+// For Vercel/serverless, we don't need to listen
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  connectDB().then(() => {
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });
-  }
-});
+  }).catch(console.error);
+}
 
 module.exports = app;
 
