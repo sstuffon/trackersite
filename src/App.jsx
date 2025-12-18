@@ -3,7 +3,6 @@ import MangaList from './components/MangaList';
 import SearchManga from './components/SearchManga';
 import UsersLists from './components/UsersLists';
 import FriendsLists from './components/FriendsLists';
-import ViewSpecific from './components/ViewSpecific';
 import FloatingLegend from './components/Sidebar';
 import { getTrackedManga } from './services/storage';
 import { getCurrentUser } from './services/userStorage';
@@ -19,19 +18,6 @@ function App() {
 
   useEffect(() => {
     loadManga();
-    
-    // Listen for viewSpecificUser event from ViewSpecific component
-    const handleViewSpecificUser = (event) => {
-      const { username } = event.detail;
-      setActiveTab('friends');
-      // FriendsLists component will handle loading the user's list
-      setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('loadUserList', { detail: { username } }));
-      }, 100);
-    };
-    
-    window.addEventListener('viewSpecificUser', handleViewSpecificUser);
-    return () => window.removeEventListener('viewSpecificUser', handleViewSpecificUser);
   }, [currentUser]);
 
   const loadManga = async () => {
@@ -112,12 +98,6 @@ function App() {
           Search & Add
         </button>
         <button 
-          className={activeTab === 'viewSpecific' ? 'active' : ''}
-          onClick={() => setActiveTab('viewSpecific')}
-        >
-          View Specific
-        </button>
-        <button 
           className={activeTab === 'friends' ? 'active' : ''}
           onClick={() => setActiveTab('friends')}
         >
@@ -157,8 +137,6 @@ function App() {
           </>
         ) : activeTab === 'search' ? (
           <SearchManga onAdd={handleMangaUpdate} />
-        ) : activeTab === 'viewSpecific' ? (
-          <ViewSpecific />
         ) : activeTab === 'friends' ? (
           <FriendsLists />
         ) : (
@@ -166,7 +144,7 @@ function App() {
         )}
       </main>
 
-      {activeTab !== 'users' && activeTab !== 'friends' && activeTab !== 'viewSpecific' && (
+      {activeTab !== 'users' && activeTab !== 'friends' && (
         <FloatingLegend
           mangaList={trackedManga}
           onStatusFilter={handleStatusFilter}
