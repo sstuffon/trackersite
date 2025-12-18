@@ -31,12 +31,7 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     const chaptersInt = parseInt(chapters) || 0;
     const validChapters = Math.max(0, chaptersInt);
     
-    // Update the manga in the list immediately for responsive UI
-    const updatedManga = mangaList.map(m => 
-      m.mal_id === malId ? { ...m, chaptersRead: validChapters } : m
-    );
-    
-    // Save asynchronously in background
+    // Save asynchronously in background without blocking UI
     updateManga(malId, { chaptersRead: validChapters }).then(() => {
       onUpdate();
     });
