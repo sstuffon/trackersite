@@ -85,44 +85,6 @@
   gap: 1rem;
 }
 
-.sort-options {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.sort-label {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.sort-options button {
-  padding: 0.5rem 1rem;
-  background: transparent;
-  color: var(--text-primary);
-  border: none;
-  border-radius: 0;
-  font-size: 0.85rem;
-  font-family: 'Courier New', Courier, monospace;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  outline: none;
-  letter-spacing: 0.5px;
-}
-
-.sort-options button:hover,
-.sort-options button:focus {
-  background: var(--text-primary);
-  color: var(--background);
-}
-
-.sort-options button.active {
-  background: var(--text-primary);
-  color: var(--background);
-}
-
 .avg-rating-badge {
   font-size: 0.85rem;
   color: var(--text-primary);
