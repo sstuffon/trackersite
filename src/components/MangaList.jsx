@@ -285,7 +285,9 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                     <div key={index} className="other-rating-item">
                       <span className="other-rating-username">{rating.username}:</span>
                       <span className="other-rating-value">
-                        {rating.rating && rating.rating > 10 ? 'PEAK' : rating.rating ? `${rating.rating.toFixed(1)}/10` : 'No rating'}
+                        {rating.rating && rating.rating > 10 ? (
+                          <>PEAK ({rating.rating.toFixed(1)})</>
+                        ) : rating.rating ? `${rating.rating.toFixed(1)}/10` : 'No rating'}
                       </span>
                     </div>
                   ))}
