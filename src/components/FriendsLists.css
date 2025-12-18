@@ -11,6 +11,151 @@
   gap: 1rem;
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.back-button:hover,
+.back-button:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.filters-and-sort {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.sort-options button {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  border-radius: 0;
+  font-size: 0.85rem;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  letter-spacing: 0.5px;
+}
+
+.sort-options button:hover,
+.sort-options button:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.sort-options button.active {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.avg-rating-badge {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--surface);
+}
+
+.friends-user-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.friends-user-list h2 {
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  font-weight: normal;
+  letter-spacing: 1px;
+  font-family: 'Courier New', Courier, monospace;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.user-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 2px solid var(--border-color);
+}
+
+.user-card:hover {
+  border-left-color: var(--text-primary);
+  background: var(--background-alt);
+}
+
+.user-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-card-name {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.user-card-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.view-all-card {
+  border-left-color: var(--text-primary);
+  background: var(--background-alt);
+}
+
+.view-all-card .user-card-name {
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
 .friends-lists-header h2 {
   font-size: 1.8rem;
   color: var(--text-primary);
