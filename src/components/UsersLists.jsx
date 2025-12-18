@@ -127,9 +127,12 @@ const UsersLists = ({ onUserSwitch }) => {
   const handleSwitchUser = (username) => {
     setCurrentUser(username);
     setCurrentUserState(username);
-    if (onUserSwitch) {
-      onUserSwitch();
-    }
+    // Force reload after a short delay to ensure state updates
+    setTimeout(() => {
+      if (onUserSwitch) {
+        onUserSwitch();
+      }
+    }, 100);
   };
 
   return (
