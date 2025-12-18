@@ -25,25 +25,61 @@ let db;
 // Connect to MongoDB
 async function connectDB() {
   try {
-    if (!client || !client.topology || !client.topology.isConnected()) {
+    // Check if client exists and is connected
+    let needsReconnect = false;
+    
+    if (!client) {
+      needsReconnect = true;
+    } else {
+      // Check if topology is closed or connection is lost
+      try {
+        // Try to ping the database to check connection
+        await client.db(DB_NAME).admin().ping();
+      } catch (pingError) {
+        // Connection is lost, need to reconnect
+        needsReconnect = true;
+        console.log('MongoDB connection lost, reconnecting...');
+      }
+    }
+    
+    if (needsReconnect) {
+      // Close existing client if it exists
       if (client) {
         try {
           await client.close();
-        } catch (e) {
+        } catch (closeError) {
           // Ignore close errors
+          console.log('Error closing old connection:', closeError.message);
         }
       }
-      client = new MongoClient(MONGODB_URI);
+      
+      // Create new connection
+      client = new MongoClient(MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000,
+        connectTimeoutMS: 10000,
+      });
       await client.connect();
       db = client.db(DB_NAME);
       console.log('Connected to MongoDB');
     }
+    
     if (!db) {
       db = client.db(DB_NAME);
     }
+    
     return db;
   } catch (error) {
     console.error('MongoDB connection error:', error);
+    // Reset client on error so next request will reconnect
+    if (client) {
+      try {
+        await client.close();
+      } catch (e) {
+        // Ignore
+      }
+      client = null;
+      db = null;
+    }
     throw error;
   }
 }
