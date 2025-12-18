@@ -103,15 +103,23 @@ const UsersLists = ({ onUserSwitch }) => {
     }
     
     try {
-      await addUser(username);
-      setNewUsername('');
-      await loadUsers();
-    } catch (error) {
-      if (error.message.includes('already exists')) {
-        alert('Username already exists!');
+      const success = await addUser(username);
+      if (success) {
+        setNewUsername('');
+        await loadUsers();
       } else {
+        alert('Username already exists!');
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      // If it's a network error, the fallback should have handled it
+      // But if it's another error, show a message
+      if (!error.message.includes('Failed to fetch') && !error.message.includes('NetworkError')) {
         alert('Error creating user. Please try again.');
-        console.error('Error creating user:', error);
+      } else {
+        // Fallback worked, reload users
+        setNewUsername('');
+        await loadUsers();
       }
     }
   };

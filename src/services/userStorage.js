@@ -1,6 +1,25 @@
-import { api } from './api';
+import { api, isApiAvailable } from './api';
 
 const CURRENT_USER_KEY = 'manga_tracker_current_user';
+const USERS_KEY = 'manga_tracker_users';
+
+// Fallback to localStorage if API is not available
+const getLocalStorageUsers = () => {
+  try {
+    const stored = localStorage.getItem(USERS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalStorageUsers = (users) => {
+  try {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+  }
+};
 
 // Keep current user in localStorage (client-side preference)
 export const getCurrentUser = () => {
@@ -20,14 +39,19 @@ export const setCurrentUser = (username) => {
   }
 };
 
-// Backend API calls
+// Backend API calls with localStorage fallback
 export const getAllUsers = async () => {
   try {
     return await api.getAllUsers();
   } catch (error) {
-    console.error('Error fetching users:', error);
-    // Fallback to default user if API fails
-    return ['default'];
+    console.error('Error fetching users from API, using localStorage fallback:', error);
+    const localUsers = getLocalStorageUsers();
+    if (localUsers.length === 0) {
+      // Initialize with default user
+      saveLocalStorageUsers(['default']);
+      return ['default'];
+    }
+    return localUsers;
   }
 };
 
@@ -53,10 +77,34 @@ export const saveUserMangaList = async (username, mangaList) => {
 export const addUser = async (username) => {
   try {
     await api.createUser(username);
+    // Also save to localStorage as backup
+    const localUsers = getLocalStorageUsers();
+    if (!localUsers.includes(username)) {
+      localUsers.push(username);
+      saveLocalStorageUsers(localUsers);
+    }
     return true;
   } catch (error) {
-    console.error('Error creating user:', error);
-    if (error.message.includes('already exists')) {
+    console.error('Error creating user via API, trying localStorage fallback:', error);
+    
+    // Fallback to localStorage if API fails
+    if (!isApiAvailable() || error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+      const localUsers = getLocalStorageUsers();
+      if (localUsers.includes(username)) {
+        return false; // Already exists
+      }
+      localUsers.push(username);
+      saveLocalStorageUsers(localUsers);
+      
+      // Initialize empty list for new user in localStorage
+      const key = `manga_tracker_list_${username}`;
+      if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, JSON.stringify([]));
+      }
+      return true;
+    }
+    
+    if (error.message.includes('already exists') || error.message.includes('409')) {
       return false;
     }
     throw error;

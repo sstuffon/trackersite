@@ -1,6 +1,9 @@
 // API configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://tracker-api.vercel.app';
 
+// Check if API is available
+let apiAvailable = true;
+
 // Helper function for API calls
 async function apiCall(endpoint, options = {}) {
   try {
@@ -17,12 +20,19 @@ async function apiCall(endpoint, options = {}) {
       throw new Error(error.error || `HTTP error! status: ${response.status}`);
     }
 
+    apiAvailable = true;
     return await response.json();
   } catch (error) {
+    // If it's a network error, mark API as unavailable
+    if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+      apiAvailable = false;
+    }
     console.error('API call error:', error);
     throw error;
   }
 }
+
+export const isApiAvailable = () => apiAvailable;
 
 // User management
 export const api = {

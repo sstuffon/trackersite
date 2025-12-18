@@ -1,13 +1,48 @@
 import { getCurrentUser, getUserMangaList, saveUserMangaList } from './userStorage';
+import { isApiAvailable } from './api';
+
+// Fallback to localStorage if API is not available
+const getLocalStorageMangaList = (username) => {
+  try {
+    const key = `manga_tracker_list_${username}`;
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveLocalStorageMangaList = (username, mangaList) => {
+  try {
+    const key = `manga_tracker_list_${username}`;
+    localStorage.setItem(key, JSON.stringify(mangaList));
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+  }
+};
 
 export const getTrackedManga = async () => {
   const currentUser = getCurrentUser();
-  return await getUserMangaList(currentUser);
+  try {
+    return await getUserMangaList(currentUser);
+  } catch (error) {
+    console.error('Error fetching manga from API, using localStorage fallback:', error);
+    return getLocalStorageMangaList(currentUser);
+  }
 };
 
 export const saveTrackedManga = async (mangaList) => {
   const currentUser = getCurrentUser();
-  return await saveUserMangaList(currentUser, mangaList);
+  try {
+    const result = await saveUserMangaList(currentUser, mangaList);
+    // Also save to localStorage as backup
+    saveLocalStorageMangaList(currentUser, mangaList);
+    return result;
+  } catch (error) {
+    console.error('Error saving manga to API, using localStorage fallback:', error);
+    saveLocalStorageMangaList(currentUser, mangaList);
+    return true;
+  }
 };
 
 export const addManga = async (manga) => {
