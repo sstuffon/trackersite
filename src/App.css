@@ -68,24 +68,28 @@
   font-family: 'Courier New', Courier, monospace;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: 0;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.app-nav button:hover {
-  background: var(--surface);
-  color: var(--text-primary);
-  border-color: var(--text-primary);
+.app-nav button:hover,
+.app-nav button:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.app-nav button:active {
+  background: var(--text-primary);
+  color: var(--background);
 }
 
 .app-nav button.active {
-  background: var(--surface);
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-  border-width: 2px;
+  background: var(--text-primary);
+  color: var(--background);
 }
 
 

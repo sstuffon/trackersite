@@ -57,13 +57,43 @@
   font-family: 'Courier New', Courier, monospace;
 }
 
+.manga-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .manga-info h3 {
   font-size: 1.5rem;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin: 0;
   font-family: 'Courier New', Courier, monospace;
   font-weight: normal;
   letter-spacing: 1px;
+}
+
+.manga-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.publish-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-status-badge {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  text-transform: capitalize;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border-color);
+  background: transparent;
 }
 
 .japanese-title {
@@ -240,7 +270,7 @@
   padding: 0.75rem;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  border: none;
   border-radius: 0;
   cursor: pointer;
   font-weight: normal;
@@ -248,9 +278,16 @@
   transition: all 0.2s ease;
   margin-top: auto;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.remove-btn:hover {
+.remove-btn:hover,
+.remove-btn:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.remove-btn:active {
   background: var(--text-primary);
   color: var(--background);
 }

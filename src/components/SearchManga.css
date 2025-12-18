@@ -127,7 +127,7 @@
   padding: 1rem 2rem;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  border: none;
   border-radius: 0;
   font-size: 1rem;
   font-weight: normal;
@@ -135,9 +135,16 @@
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.search-btn:hover:not(:disabled) {
+.search-btn:hover:not(:disabled),
+.search-btn:focus:not(:disabled) {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.search-btn:active:not(:disabled) {
   background: var(--text-primary);
   color: var(--background);
 }
@@ -282,7 +289,7 @@
   padding: 0.75rem;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  border: none;
   border-radius: 0;
   font-weight: normal;
   font-family: 'Courier New', Courier, monospace;
@@ -290,9 +297,16 @@
   transition: all 0.2s ease;
   margin-top: 0.5rem;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.add-btn:hover {
+.add-btn:hover,
+.add-btn:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.add-btn:active {
   background: var(--text-primary);
   color: var(--background);
 }

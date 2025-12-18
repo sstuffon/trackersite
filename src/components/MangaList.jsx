@@ -29,7 +29,15 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
   };
 
   const handleStatusChange = async (malId, status) => {
-    await updateManga(malId, { status });
+    const manga = mangaList.find(m => m.mal_id === malId);
+    const updates = { status };
+    
+    // If status is "completed" and manga has total chapters, set chaptersRead to max
+    if (status === 'completed' && manga && manga.chapters && manga.chapters > 0) {
+      updates.chaptersRead = manga.chapters;
+    }
+    
+    await updateManga(malId, updates);
     onUpdate();
   };
 
@@ -72,7 +80,17 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
           </div>
           
           <div className="manga-info">
-            <h3>{manga.title}</h3>
+            <div className="manga-title-section">
+              <h3>{manga.title}</h3>
+              <div className="manga-meta">
+                {manga.published && manga.published.from && (
+                  <span className="publish-date">
+                    Started: {new Date(manga.published.from).getFullYear()}
+                  </span>
+                )}
+                <span className="manga-status-badge">{manga.status || 'Unknown'}</span>
+              </div>
+            </div>
             {manga.title_japanese && (
               <p className="japanese-title">{manga.title_japanese}</p>
             )}
@@ -82,12 +100,13 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
             
             <div className="manga-stats">
               <div className="stat">
-                <span className="stat-label">Total Chapters:</span>
-                <span className="stat-value">{manga.chapters || 'Unknown'}</span>
-              </div>
-              <div className="stat">
-                <span className="stat-label">Status:</span>
-                <span className="stat-value">{manga.status || 'Unknown'}</span>
+                <span className="stat-label">Chapters:</span>
+                <span className="stat-value">
+                  {manga.chapters 
+                    ? `${manga.chaptersRead || 0} / ${manga.chapters}`
+                    : `${manga.chaptersRead || 0}`
+                  }
+                </span>
               </div>
             </div>
           </div>
@@ -152,26 +171,31 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                 id={`chapters-${manga.mal_id}`}
                 type="number"
                 min="0"
+                max={manga.chapters || undefined}
                 value={manga.chaptersRead || 0}
                 onChange={(e) => handleChaptersChange(manga.mal_id, e.target.value)}
                 className="chapters-input"
               />
               {manga.chapters && (
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{
-                      width: `${Math.min(100, ((manga.chaptersRead || 0) / manga.chapters) * 100)}%`
-                    }}
-                  />
-                </div>
+                <>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${Math.min(100, ((manga.chaptersRead || 0) / manga.chapters) * 100)}%`
+                      }}
+                    />
+                  </div>
+                  <span className="progress-text">
+                    {manga.chaptersRead || 0} / {manga.chapters} chapters
+                  </span>
+                </>
               )}
-              <span className="progress-text">
-                {manga.chapters 
-                  ? `${manga.chaptersRead || 0} / ${manga.chapters}`
-                  : `${manga.chaptersRead || 0} chapters`
-                }
-              </span>
+              {!manga.chapters && (
+                <span className="progress-text">
+                  {manga.chaptersRead || 0} chapters read
+                </span>
+              )}
             </div>
 
             <div className="control-group">

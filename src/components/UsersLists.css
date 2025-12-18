@@ -72,16 +72,23 @@
   padding: 0.75rem 2rem;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  border: none;
   border-radius: 0;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.create-btn:hover {
+.create-btn:hover,
+.create-btn:focus {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.create-btn:active {
   background: var(--text-primary);
   color: var(--background);
 }
@@ -167,16 +174,23 @@
   padding: 0.75rem;
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--text-primary);
+  border: none;
   border-radius: 0;
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
   letter-spacing: 1px;
+  outline: none;
 }
 
-.switch-btn:hover:not(.disabled) {
+.switch-btn:hover:not(.disabled),
+.switch-btn:focus:not(.disabled) {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.switch-btn:active:not(.disabled) {
   background: var(--text-primary);
   color: var(--background);
 }
@@ -184,7 +198,6 @@
 .switch-btn.disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  border-color: var(--border-color);
 }
 
 @media (max-width: 768px) {
