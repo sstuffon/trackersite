@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background: #000000;
+  --background-alt: #000000;
+  --surface: #0a0a0a;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #333333;
+  --accent: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background: var(--background);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+code {
+  font-family: 'Courier New', Courier, monospace;
+}
+

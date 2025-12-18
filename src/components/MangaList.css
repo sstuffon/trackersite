@@ -1,0 +1,311 @@
+.manga-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  gap: 1.5rem;
+  transition: all 0.2s ease;
+  border-left: 2px solid var(--border-color);
+}
+
+.manga-card:hover {
+  border-left-color: var(--text-primary);
+  background: var(--background-alt);
+}
+
+.manga-image {
+  width: 150px;
+  height: 200px;
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--background-alt);
+  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+}
+
+.manga-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.manga-image .no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-info h3 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: normal;
+  letter-spacing: 1px;
+}
+
+.japanese-title {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-style: normal;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.synopsis {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--text-primary);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.manga-controls {
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--border-color);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.rating-input,
+.chapters-input {
+  padding: 0.5rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.rating-input:focus,
+.chapters-input:focus,
+.status-select:focus,
+.comments-input:focus {
+  outline: none;
+  border-color: var(--text-primary);
+  background: var(--surface);
+}
+
+.status-select {
+  padding: 0.5rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+}
+
+.status-select option {
+  background: var(--background-alt);
+  color: var(--text-primary);
+}
+
+.rating-display {
+  display: flex;
+  gap: 1px;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.rating-display .star {
+  color: var(--border-color);
+  transition: color 0.2s;
+}
+
+.rating-display .star.filled {
+  color: var(--text-primary);
+}
+
+.rating-display .star.half {
+  color: var(--text-secondary);
+}
+
+.rating-value {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.comments-input {
+  padding: 0.5rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.comments-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--background-alt);
+  border-radius: 0;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--text-primary);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.remove-btn {
+  padding: 0.75rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: normal;
+  font-family: 'Courier New', Courier, monospace;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  letter-spacing: 1px;
+}
+
+.remove-btn:hover {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+@media (max-width: 1024px) {
+  .manga-card {
+    grid-template-columns: 120px 1fr;
+  }
+  
+  .manga-controls {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding-left: 0;
+    padding-top: 1.5rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .control-group {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .manga-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .manga-image {
+    width: 100%;
+    height: 300px;
+  }
+  
+  .manga-controls {
+    flex-direction: column;
+  }
+  
+  .control-group {
+    min-width: 100%;
+  }
+  
+  .manga-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+

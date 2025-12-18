@@ -1,0 +1,203 @@
+.users-lists {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.users-lists h2 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  font-weight: normal;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.current-user-section {
+  margin-bottom: 2rem;
+}
+
+.current-user-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+}
+
+.username {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.user-badge {
+  padding: 0.25rem 0.75rem;
+  background: var(--text-primary);
+  color: var(--background);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.create-user-section {
+  margin-bottom: 2rem;
+}
+
+.create-user-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.username-input {
+  flex: 1;
+  padding: 0.75rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.username-input:focus {
+  outline: none;
+  border-color: var(--text-primary);
+  background: var(--surface);
+}
+
+.create-btn {
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  border-radius: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.create-btn:hover {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.all-users-section {
+  margin-bottom: 2rem;
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.user-card {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.user-card:hover {
+  border-color: var(--text-primary);
+}
+
+.user-card.active {
+  border-color: var(--text-primary);
+  border-width: 2px;
+}
+
+.user-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.user-card-name {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  text-transform: capitalize;
+}
+
+.current-badge {
+  padding: 0.25rem 0.5rem;
+  background: var(--text-primary);
+  color: var(--background);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+.user-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: var(--background-alt);
+  border: 1px solid var(--border-color);
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.stat-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+.switch-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+  border-radius: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.switch-btn:hover:not(.disabled) {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.switch-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .users-lists {
+    padding: 1rem;
+  }
+  
+  .users-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .create-user-form {
+    flex-direction: column;
+  }
+}
+
