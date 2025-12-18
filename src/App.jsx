@@ -12,6 +12,7 @@ function App() {
   const [trackedManga, setTrackedManga] = useState([]);
   const [activeTab, setActiveTab] = useState('list');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [sortOrder, setSortOrder] = useState(null); // null, 'highest', 'lowest'
   const [scrollToId, setScrollToId] = useState(null);
   const [currentUser, setCurrentUser] = useState(getCurrentUser());
 
@@ -43,6 +44,10 @@ function App() {
     setStatusFilter(status);
   };
 
+  const handleSortOrder = (order) => {
+    setSortOrder(order === sortOrder ? null : order); // Toggle off if clicking same button
+  };
+
   const handleNavigateToManga = (malId) => {
     setScrollToId(malId);
     setTimeout(() => {
@@ -57,10 +62,17 @@ function App() {
     }, 100);
   };
 
-  // Sort by rating (highest first), then filter by status
-  const sortedAndFilteredManga = [...trackedManga]
-    .sort((a, b) => (b.userRating || 0) - (a.userRating || 0))
-    .filter(manga => statusFilter === 'all' || manga.status === statusFilter);
+  // Filter by status first, then sort if sort order is set
+  let filteredManga = trackedManga.filter(manga => statusFilter === 'all' || manga.status === statusFilter);
+  
+  // Apply sorting if sort order is selected
+  if (sortOrder === 'highest') {
+    filteredManga = [...filteredManga].sort((a, b) => (b.userRating || 0) - (a.userRating || 0));
+  } else if (sortOrder === 'lowest') {
+    filteredManga = [...filteredManga].sort((a, b) => (a.userRating || 0) - (b.userRating || 0));
+  }
+  
+  const sortedAndFilteredManga = filteredManga;
 
   return (
     <div className="app">
@@ -120,7 +132,9 @@ function App() {
           mangaList={trackedManga}
           onStatusFilter={handleStatusFilter}
           onNavigateToManga={handleNavigateToManga}
+          onSortOrder={handleSortOrder}
           currentFilter={statusFilter}
+          currentSortOrder={sortOrder}
         />
       )}
     </div>

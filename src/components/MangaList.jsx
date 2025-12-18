@@ -60,12 +60,9 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     // Clamp to maximum of 11.0
     const clampedRating = Math.min(11.0, Math.max(0, numRating));
     
-    // Round to 1 decimal place
-    const roundedRating = Math.round(clampedRating * 10) / 10;
-    
-    // Update local state immediately
+    // Update local state immediately with raw value (don't round during typing)
     setLocalManga(prev => prev.map(m => 
-      m.mal_id === malId ? { ...m, userRating: roundedRating } : m
+      m.mal_id === malId ? { ...m, userRating: clampedRating } : m
     ));
     
     // Clear existing timeout for this manga
@@ -73,12 +70,25 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
       clearTimeout(saveTimeouts.current[malId]);
     }
     
-    // Save after debounce delay
+    // Save after debounce delay - round to 1 decimal place when saving
     saveTimeouts.current[malId] = setTimeout(async () => {
+      const roundedRating = Math.round(clampedRating * 10) / 10;
       await updateManga(malId, { userRating: roundedRating });
       onUpdate();
       delete saveTimeouts.current[malId];
     }, 500);
+  };
+
+  const handleRatingBlur = (malId, rating) => {
+    // Round to 1 decimal place when user leaves the field
+    const numRating = parseFloat(rating);
+    if (!isNaN(numRating) && numRating >= 0) {
+      const clampedRating = Math.min(11.0, Math.max(0, numRating));
+      const roundedRating = Math.round(clampedRating * 10) / 10;
+      setLocalManga(prev => prev.map(m => 
+        m.mal_id === malId ? { ...m, userRating: roundedRating } : m
+      ));
+    }
   };
 
   const handleChaptersChange = (malId, chapters) => {
@@ -261,6 +271,7 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                 step="0.1"
                 value={manga.userRating || 0}
                 onChange={(e) => handleRatingChange(manga.mal_id, e.target.value)}
+                onBlur={(e) => handleRatingBlur(manga.mal_id, e.target.value)}
                 className="rating-input"
                 placeholder="Enter rating (0.0-11.0, values over 10 show as Peak)"
               />
