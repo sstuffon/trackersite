@@ -19,6 +19,19 @@ function App() {
 
   useEffect(() => {
     loadManga();
+    
+    // Listen for viewSpecificUser event from ViewSpecific component
+    const handleViewSpecificUser = (event) => {
+      const { username } = event.detail;
+      setActiveTab('friends');
+      // FriendsLists component will handle loading the user's list
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('loadUserList', { detail: { username } }));
+      }, 100);
+    };
+    
+    window.addEventListener('viewSpecificUser', handleViewSpecificUser);
+    return () => window.removeEventListener('viewSpecificUser', handleViewSpecificUser);
   }, [currentUser]);
 
   const loadManga = async () => {

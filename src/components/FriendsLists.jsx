@@ -20,6 +20,17 @@ const FriendsLists = () => {
     }
   }, [view]);
 
+  useEffect(() => {
+    // Listen for loadUserList event from ViewSpecific
+    const handleLoadUserList = (event) => {
+      const { username } = event.detail;
+      loadUserManga(username);
+    };
+    
+    window.addEventListener('loadUserList', handleLoadUserList);
+    return () => window.removeEventListener('loadUserList', handleLoadUserList);
+  }, []);
+
   const loadAllUsersManga = async () => {
     try {
       setLoading(true);
