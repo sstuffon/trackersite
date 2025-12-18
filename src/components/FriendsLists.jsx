@@ -171,19 +171,6 @@ const FriendsLists = () => {
 
   return (
     <div className="friends-lists">
-      <div className="sort-dropdown-container">
-        <label htmlFor="friends-sort-dropdown" className="sort-label">Sort by:</label>
-        <select
-          id="friends-sort-dropdown"
-          className="sort-dropdown"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value="status">Status</option>
-          <option value="lowest">Lowest Score</option>
-          <option value="highest">{view === 'all' ? 'Highest Avg' : 'Highest Score'}</option>
-        </select>
-      </div>
       <div className="friends-lists-header">
         <div className="header-top">
           <button className="back-button" onClick={() => setView('users')}>

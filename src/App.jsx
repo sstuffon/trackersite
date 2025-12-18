@@ -112,27 +112,27 @@ function App() {
       </nav>
 
       <main className="app-main">
+        {activeTab === 'list' && (
+          <div className="sort-dropdown-container">
+            <label htmlFor="sort-dropdown" className="sort-label">Sort by:</label>
+            <select
+              id="sort-dropdown"
+              className="sort-dropdown"
+              value={sortOrder || 'none'}
+              onChange={(e) => handleSortOrder(e.target.value === 'none' ? null : e.target.value)}
+            >
+              <option value="none">None</option>
+              <option value="highest">Highest Score</option>
+              <option value="lowest">Lowest Score</option>
+            </select>
+          </div>
+        )}
         {activeTab === 'list' ? (
-          <>
-            <div className="sort-dropdown-container">
-              <label htmlFor="sort-dropdown" className="sort-label">Sort by:</label>
-              <select
-                id="sort-dropdown"
-                className="sort-dropdown"
-                value={sortOrder || 'none'}
-                onChange={(e) => handleSortOrder(e.target.value === 'none' ? null : e.target.value)}
-              >
-                <option value="none">None</option>
-                <option value="highest">Highest Score</option>
-                <option value="lowest">Lowest Score</option>
-              </select>
-            </div>
-            <MangaList 
-              mangaList={sortedAndFilteredManga} 
-              onUpdate={handleMangaUpdate}
-              scrollToId={scrollToId}
-            />
-          </>
+          <MangaList 
+            mangaList={sortedAndFilteredManga} 
+            onUpdate={handleMangaUpdate}
+            scrollToId={scrollToId}
+          />
         ) : activeTab === 'search' ? (
           <SearchManga onAdd={handleMangaUpdate} />
         ) : activeTab === 'friends' ? (
