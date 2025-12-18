@@ -57,11 +57,11 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
       return; // Don't update if invalid
     }
     
-    // Clamp to maximum of 11
-    const clampedRating = Math.min(11, Math.max(0, numRating));
+    // Clamp to maximum of 11.0
+    const clampedRating = Math.min(11.0, Math.max(0, numRating));
     
-    // Round to nearest 0.5 for values 0-10, keep exact value for 10.5-11
-    const roundedRating = clampedRating > 10 ? clampedRating : Math.round(clampedRating * 2) / 2;
+    // Round to 1 decimal place
+    const roundedRating = Math.round(clampedRating * 10) / 10;
     
     // Update local state immediately
     setLocalManga(prev => prev.map(m => 
@@ -258,11 +258,11 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                 type="number"
                 min="0"
                 max="11"
-                step="0.5"
+                step="0.1"
                 value={manga.userRating || 0}
                 onChange={(e) => handleRatingChange(manga.mal_id, e.target.value)}
                 className="rating-input"
-                placeholder="Enter rating (0-10 or 10.5-11 for Peak)"
+                placeholder="Enter rating (0.0-11.0, values over 10 show as Peak)"
               />
               <div className="rating-display-value">
                 {manga.userRating && manga.userRating > 10 ? (
