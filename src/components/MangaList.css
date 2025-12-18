@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .manga-card {
@@ -46,7 +46,7 @@
   justify-content: center;
   color: var(--text-secondary);
   font-size: 0.9rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .manga-info {
@@ -54,7 +54,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .manga-title-section {
@@ -65,12 +65,12 @@
 }
 
 .manga-info h3 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: var(--text-primary);
   margin: 0;
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: normal;
-  letter-spacing: 1px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .manga-meta {
@@ -81,34 +81,38 @@
 }
 
 .publish-date {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .manga-status-badge {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--text-primary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   text-transform: capitalize;
   padding: 0.25rem 0.5rem;
   border: 1px solid var(--border-color);
   background: transparent;
+  font-weight: 400;
 }
 
 .japanese-title {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-style: normal;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .synopsis {
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 1.6;
   margin: 0.5rem 0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .manga-stats {
@@ -125,16 +129,17 @@
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .stat-value {
-  font-size: 1rem;
-  font-weight: normal;
+  font-size: 0.95rem;
+  font-weight: 400;
   color: var(--text-primary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .manga-controls {
@@ -153,10 +158,10 @@
 }
 
 .control-group label {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  font-weight: normal;
-  font-family: 'Courier New', Courier, monospace;
+  font-weight: 300;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .rating-input {
@@ -165,9 +170,10 @@
   border: 1px solid var(--border-color);
   border-radius: 0;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 0.95rem;
   width: 100%;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
 }
 
 .chapters-input-wrapper {
@@ -185,8 +191,15 @@
   border-radius: 0;
   color: var(--text-primary);
   font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
-  text-align: center;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  text-align: left;
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.chapters-input::-webkit-outer-spin-button,
+.chapters-input::-webkit-inner-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  margin: 0;
 }
 
 .chapters-btn {
@@ -195,8 +208,8 @@
   color: var(--text-primary);
   border: none;
   border-radius: 0;
-  font-size: 1.5rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
@@ -205,6 +218,7 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
+  font-weight: normal;
 }
 
 .chapters-btn:hover,
@@ -233,10 +247,11 @@
   border: 1px solid var(--border-color);
   border-radius: 0;
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 0.95rem;
   width: 100%;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   cursor: pointer;
+  font-weight: 400;
 }
 
 .status-select option {
@@ -251,17 +266,18 @@
 }
 
 .rating-value {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .rating-peak {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-primary);
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: normal;
-  letter-spacing: 2px;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
 }
 
@@ -271,11 +287,12 @@
   border: 1px solid var(--border-color);
   border-radius: 0;
   color: var(--text-primary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   width: 100%;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   resize: vertical;
   min-height: 60px;
+  font-weight: 300;
 }
 
 .comments-input::placeholder {
@@ -300,10 +317,11 @@
 }
 
 .progress-text {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   margin-top: 0.25rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 .remove-btn {
@@ -313,12 +331,13 @@
   border: none;
   border-radius: 0;
   cursor: pointer;
-  font-weight: normal;
-  font-family: 'Courier New', Courier, monospace;
+  font-weight: 400;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   transition: all 0.2s ease;
   margin-top: auto;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   outline: none;
+  font-size: 0.9rem;
 }
 
 .remove-btn:hover,
@@ -336,8 +355,9 @@
   text-align: center;
   padding: 4rem 2rem;
   color: var(--text-secondary);
-  font-size: 1.1rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-weight: 300;
 }
 
 @media (max-width: 1024px) {

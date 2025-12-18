@@ -2,7 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .users-lists h2 {
@@ -59,7 +59,7 @@
   border-radius: 0;
   color: var(--text-primary);
   font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
 }
 
 .username-input:focus {
@@ -74,7 +74,7 @@
   color: var(--text-primary);
   border: none;
   border-radius: 0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -176,7 +176,7 @@
   color: var(--text-primary);
   border: none;
   border-radius: 0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;

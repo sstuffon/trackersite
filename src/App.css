@@ -20,30 +20,32 @@
   background: var(--background-alt);
   padding: 2rem;
   text-align: center;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: none;
 }
 
 .app-header h1 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   margin-bottom: 0.5rem;
-  font-weight: normal;
-  font-family: 'Courier New', Courier, monospace;
+  font-weight: 300;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   color: var(--text-primary);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
 .app-header p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   margin-bottom: 0.5rem;
+  font-weight: 300;
 }
 
 .current-user-indicator {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   margin-top: 0.5rem;
+  font-weight: 300;
 }
 
 .user-name {
@@ -58,21 +60,21 @@
   gap: 1rem;
   padding: 1.5rem;
   background: var(--background);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: none;
 }
 
 .app-nav button {
   padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: normal;
-  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-family: 'Helvetica', 'Arial', sans-serif;
   background: transparent;
   color: var(--text-primary);
   border: none;
   border-radius: 0;
   cursor: pointer;
   transition: all 0.2s ease;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   outline: none;
 }
 

@@ -26,25 +26,38 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
     onUpdate();
   };
 
-  const handleChaptersChange = async (malId, chapters) => {
+  const handleChaptersChange = (malId, chapters) => {
+    // Update immediately without waiting for async
     const chaptersInt = parseInt(chapters) || 0;
-    await updateManga(malId, { chaptersRead: Math.max(0, chaptersInt) });
-    onUpdate();
+    const validChapters = Math.max(0, chaptersInt);
+    
+    // Update the manga in the list immediately for responsive UI
+    const updatedManga = mangaList.map(m => 
+      m.mal_id === malId ? { ...m, chaptersRead: validChapters } : m
+    );
+    
+    // Save asynchronously in background
+    updateManga(malId, { chaptersRead: validChapters }).then(() => {
+      onUpdate();
+    });
   };
 
-  const handleChaptersIncrement = async (malId, increment) => {
+  const handleChaptersIncrement = (malId, increment) => {
     const manga = mangaList.find(m => m.mal_id === malId);
     const currentChapters = manga?.chaptersRead || 0;
     const newChapters = Math.max(0, currentChapters + increment);
-    await updateManga(malId, { chaptersRead: newChapters });
-    onUpdate();
     
-    // Highlight the input briefly
-    const input = document.getElementById(`chapters-${malId}`);
-    if (input) {
-      input.focus();
-      input.select();
-    }
+    // Update immediately
+    handleChaptersChange(malId, newChapters.toString());
+    
+    // Highlight the input
+    setTimeout(() => {
+      const input = document.getElementById(`chapters-${malId}`);
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 10);
   };
 
   const handleStatusChange = async (malId, status) => {
@@ -178,14 +191,6 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                 Chapters Read:
               </label>
               <div className="chapters-input-wrapper">
-                <button
-                  type="button"
-                  className="chapters-btn chapters-btn-minus"
-                  onClick={() => handleChaptersIncrement(manga.mal_id, -1)}
-                  aria-label="Decrease chapters"
-                >
-                  −
-                </button>
                 <input
                   id={`chapters-${manga.mal_id}`}
                   type="number"
@@ -196,6 +201,14 @@ const MangaList = ({ mangaList, onUpdate, scrollToId }) => {
                   onChange={(e) => handleChaptersChange(manga.mal_id, e.target.value)}
                   className="chapters-input"
                 />
+                <button
+                  type="button"
+                  className="chapters-btn chapters-btn-minus"
+                  onClick={() => handleChaptersIncrement(manga.mal_id, -1)}
+                  aria-label="Decrease chapters"
+                >
+                  −
+                </button>
                 <button
                   type="button"
                   className="chapters-btn chapters-btn-plus"
