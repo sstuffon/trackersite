@@ -21,7 +21,7 @@ function App() {
   const loadManga = async () => {
     try {
       const manga = await getTrackedManga();
-      setTrackedManga(manga);
+      setTrackedManga(Array.isArray(manga) ? manga : []);
       setCurrentUser(getCurrentUser());
     } catch (error) {
       console.error('Error loading manga:', error);

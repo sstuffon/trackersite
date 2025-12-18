@@ -77,19 +77,28 @@ const UsersLists = ({ onUserSwitch }) => {
       if (allUsers.length === 0) {
         // Initialize with default user if no users exist
         try {
-          await addUser('default');
-          setCurrentUser('default');
-          setCurrentUserState('default');
+          const success = await addUser('default');
+          if (success) {
+            setCurrentUser('default');
+            setCurrentUserState('default');
+          }
         } catch (error) {
           console.error('Error creating default user:', error);
+          // Fallback: use localStorage default
+          setUsers(['default']);
+          setCurrentUserState('default');
+          return;
         }
       }
       const updatedUsers = await getAllUsers();
-      setUsers(updatedUsers);
+      setUsers(updatedUsers.length > 0 ? updatedUsers : ['default']);
       setCurrentUserState(getCurrentUser());
     } catch (error) {
       console.error('Error loading users:', error);
-      setUsers(['default']);
+      // Fallback to default user
+      const currentUser = getCurrentUser();
+      setUsers([currentUser || 'default']);
+      setCurrentUserState(currentUser || 'default');
     }
   };
 
