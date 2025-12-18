@@ -53,14 +53,25 @@ async function connectDB() {
         }
       }
       
-      // Create new connection
-      client = new MongoClient(MONGODB_URI, {
-        serverSelectionTimeoutMS: 5000,
+      // Create new connection with proper SSL/TLS configuration
+      const clientOptions = {
+        serverSelectionTimeoutMS: 10000,
         connectTimeoutMS: 10000,
-      });
+        socketTimeoutMS: 45000,
+        retryWrites: true,
+        w: 'majority',
+      };
+      
+      // Only add TLS options if using mongodb+srv (Atlas)
+      if (MONGODB_URI.startsWith('mongodb+srv://')) {
+        clientOptions.tls = true;
+        clientOptions.tlsAllowInvalidCertificates = false;
+      }
+      
+      client = new MongoClient(MONGODB_URI, clientOptions);
       await client.connect();
       db = client.db(DB_NAME);
-      console.log('Connected to MongoDB');
+      console.log('Connected to MongoDB successfully');
     }
     
     if (!db) {
