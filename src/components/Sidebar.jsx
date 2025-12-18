@@ -3,7 +3,7 @@ import './Sidebar.css';
 
 const STATUSES = ['all', 'reading', 'completed', 'dropped', 'on hold'];
 
-const FloatingLegend = ({ mangaList, onStatusFilter, onNavigateToManga, onSortOrder, currentFilter, currentSortOrder }) => {
+const FloatingLegend = ({ mangaList, onStatusFilter, onNavigateToManga, currentFilter }) => {
   const [expanded, setExpanded] = useState(false);
 
   const getMangaByStatus = (status) => {
@@ -26,23 +26,6 @@ const FloatingLegend = ({ mangaList, onStatusFilter, onNavigateToManga, onSortOr
       
       {expanded && (
         <div className="legend-content">
-          <div className="sort-section">
-            <div className="sort-label">SORT BY RATING:</div>
-            <div className="sort-buttons">
-              <button
-                className={`sort-btn ${currentSortOrder === 'highest' ? 'active' : ''}`}
-                onClick={() => onSortOrder('highest')}
-              >
-                HIGHEST
-              </button>
-              <button
-                className={`sort-btn ${currentSortOrder === 'lowest' ? 'active' : ''}`}
-                onClick={() => onSortOrder('lowest')}
-              >
-                LOWEST
-              </button>
-            </div>
-          </div>
           <div className="status-filters">
             {STATUSES.map(status => (
               <div key={status} className="status-group">

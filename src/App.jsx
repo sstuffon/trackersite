@@ -3,6 +3,7 @@ import MangaList from './components/MangaList';
 import SearchManga from './components/SearchManga';
 import UsersLists from './components/UsersLists';
 import FriendsLists from './components/FriendsLists';
+import ViewSpecific from './components/ViewSpecific';
 import FloatingLegend from './components/Sidebar';
 import { getTrackedManga } from './services/storage';
 import { getCurrentUser } from './services/userStorage';
@@ -98,10 +99,16 @@ function App() {
           Search & Add
         </button>
         <button 
+          className={activeTab === 'viewSpecific' ? 'active' : ''}
+          onClick={() => setActiveTab('viewSpecific')}
+        >
+          View Specific
+        </button>
+        <button 
           className={activeTab === 'friends' ? 'active' : ''}
           onClick={() => setActiveTab('friends')}
         >
-          Friends' Lists
+          Friend's List
         </button>
         <button 
           className={activeTab === 'users' ? 'active' : ''}
@@ -113,13 +120,32 @@ function App() {
 
       <main className="app-main">
         {activeTab === 'list' ? (
-          <MangaList 
-            mangaList={sortedAndFilteredManga} 
-            onUpdate={handleMangaUpdate}
-            scrollToId={scrollToId}
-          />
+          <>
+            <div className="sort-controls">
+              <span className="sort-label">Sort by:</span>
+              <button
+                className={`sort-btn ${sortOrder === 'highest' ? 'active' : ''}`}
+                onClick={() => handleSortOrder('highest')}
+              >
+                Highest Score
+              </button>
+              <button
+                className={`sort-btn ${sortOrder === 'lowest' ? 'active' : ''}`}
+                onClick={() => handleSortOrder('lowest')}
+              >
+                Lowest Score
+              </button>
+            </div>
+            <MangaList 
+              mangaList={sortedAndFilteredManga} 
+              onUpdate={handleMangaUpdate}
+              scrollToId={scrollToId}
+            />
+          </>
         ) : activeTab === 'search' ? (
           <SearchManga onAdd={handleMangaUpdate} />
+        ) : activeTab === 'viewSpecific' ? (
+          <ViewSpecific />
         ) : activeTab === 'friends' ? (
           <FriendsLists />
         ) : (
@@ -127,14 +153,12 @@ function App() {
         )}
       </main>
 
-      {activeTab !== 'users' && activeTab !== 'friends' && (
+      {activeTab !== 'users' && activeTab !== 'friends' && activeTab !== 'viewSpecific' && (
         <FloatingLegend
           mangaList={trackedManga}
           onStatusFilter={handleStatusFilter}
           onNavigateToManga={handleNavigateToManga}
-          onSortOrder={handleSortOrder}
           currentFilter={statusFilter}
-          currentSortOrder={sortOrder}
         />
       )}
     </div>

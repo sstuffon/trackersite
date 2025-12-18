@@ -166,7 +166,7 @@ const FriendsLists = () => {
             ← Back to Users
           </button>
           <h2>
-            {view === 'all' ? "All Friends' Manga" : `${selectedUser}'s List`}
+            {view === 'all' ? "All Friend's Manga" : `${selectedUser}'s List`}
           </h2>
         </div>
         <div className="filters-and-sort">
@@ -371,7 +371,7 @@ const FriendsUserList = ({ onSelectUser, onViewAll }) => {
 
   return (
     <div className="friends-user-list">
-      <h2>Friends' Lists</h2>
+      <h2>Friend's List</h2>
       <div className="users-grid">
         <div className="user-card view-all-card" onClick={onViewAll}>
           <div className="user-card-content">

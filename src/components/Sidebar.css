@@ -45,51 +45,6 @@
   max-height: calc(60vh - 50px);
 }
 
-.sort-section {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.sort-label {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  font-family: 'Courier New', Courier, monospace;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-}
-
-.sort-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.sort-btn {
-  flex: 1;
-  padding: 0.75rem;
-  background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  cursor: pointer;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-.sort-btn:hover,
-.sort-btn:focus {
-  border-color: var(--text-primary);
-  background: var(--surface);
-}
-
-.sort-btn.active {
-  border-color: var(--text-primary);
-  background: var(--text-primary);
-  color: var(--background);
-}
-
 .status-filters {
   padding: 0 1rem;
 }
