@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import MangaList from './components/MangaList';
 import SearchManga from './components/SearchManga';
 import UsersLists from './components/UsersLists';
+import FriendsLists from './components/FriendsLists';
 import FloatingLegend from './components/Sidebar';
 import { getTrackedManga } from './services/storage';
 import { getCurrentUser } from './services/userStorage';
@@ -85,6 +86,12 @@ function App() {
           Search & Add
         </button>
         <button 
+          className={activeTab === 'friends' ? 'active' : ''}
+          onClick={() => setActiveTab('friends')}
+        >
+          Friends' Lists
+        </button>
+        <button 
           className={activeTab === 'users' ? 'active' : ''}
           onClick={() => setActiveTab('users')}
         >
@@ -101,12 +108,14 @@ function App() {
           />
         ) : activeTab === 'search' ? (
           <SearchManga onAdd={handleMangaUpdate} />
+        ) : activeTab === 'friends' ? (
+          <FriendsLists />
         ) : (
           <UsersLists onUserSwitch={handleUserSwitch} />
         )}
       </main>
 
-      {activeTab !== 'users' && (
+      {activeTab !== 'users' && activeTab !== 'friends' && (
         <FloatingLegend
           mangaList={trackedManga}
           onStatusFilter={handleStatusFilter}
